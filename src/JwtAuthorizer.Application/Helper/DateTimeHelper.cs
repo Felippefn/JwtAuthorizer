@@ -4,7 +4,7 @@ public static class DateTimeHelper
     {
         get
         {
-            var tz = TimeZoneInfo.FindSystemTimeZoneId("America/Sao_Paulo");
+            var tz = TimeZoneInfo.FindSystemTimeZoneById("America/Sao_Paulo");
             return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, tz);
         }
     }

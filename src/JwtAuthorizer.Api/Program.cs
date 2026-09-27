@@ -1,10 +1,17 @@
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddAuthentication();
+
+// Requires Microsoft.AspNetCore.Authentication.JwtBearer
+builder.Services.AddAuthentication().AddJwtBearer();
 
 var app = builder.Build();
+
+app.UseCors();
+app.UseAuthentication();
+app.UseAuthorization();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -29,15 +36,16 @@ app.MapGet("/weatherforecast", () =>
             summaries[Random.Shared.Next(summaries.Length)]
         ))
         .ToArray();
-    return forecast;
+    return DateTimeHelper.HorarioBrasilia;
 })
 .WithName("GetWeatherForecast");
 
-app.MapPost("/message", (string payloadRequest) => { 
-    Console.WriteLine(payloadRequest + " was sent to server.")
+app.MapPost("/message", (string payloadRequest) =>
+{
+    Console.WriteLine(payloadRequest + " was sent to server.");
 
     return Results.Ok(new { message = "Message received successfully" });
-})
+});
 
 app.Run();
 

@@ -1,6 +1,8 @@
+using System.Security.Claims;
+
 public interface IAuthContainerModel
 {
 	int ExpirationInSeconds { get; }
 	Task<bool> hasPermission(User user);
-	IReadOnlyColletion<Claim> Claims { get; }
+	IReadOnlyCollection<Claim> Claims { get; }
 }
