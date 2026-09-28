@@ -1,4 +1,4 @@
-public interface ITokenRepository
+public interface ITokenService
 {
     Task<string> GenerateTokenAsync(User user);
     Task<bool> ValidateTokenAsync(string token);
