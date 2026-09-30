@@ -13,13 +13,13 @@ public class AuthController : ControllerBase
         _userService = userService;
     }
 
-    public record SignupRequest(string Username, string Email, string Password, Permission? Role);
-    public record LoginRequest(string Username, string Password);
 
     [HttpPost("signup")]
-    public async Task<IActionResult> Signup([FromBody] SignupRequest request)
+    public async Task<IActionResult> Signup(SignupRequest request)
     {
-        var token = await _userService.SignupAsync(request.Username, request.Email, request.Password, request.Role);
+        if
+
+        var token = await _userService.SignupAsync(request.EmailAddress, request.Password);
         return Ok(new { Message = "User created successfully." });
     }
 
@@ -37,11 +37,10 @@ public class AuthController : ControllerBase
     [HttpGet("me")]
     public IActionResult Me()
     {
-        var userId = User.FindFirst(ClaimTypes.Email)?.Value;
         var username = User.FindFirst(ClaimTypes.Name)?.Value;
         var role = User.FindFirst(ClaimTypes.Role)?.Value;
 
-        return Ok(new { userId, username, role });
+        return Ok(new { Message = "User information retrieved successfully.", Username = username, Role = role });
     }
 
     [Authorize(Roles = "Admin")]
@@ -51,6 +50,6 @@ public class AuthController : ControllerBase
         var username = User.FindFirst(ClaimTypes.Name)?.Value;
         var role = User.FindFirst(ClaimTypes.Role)?.Value;
 
-        return Ok(new { username, role });
+        return Ok(new { Message = "User information retrieved successfully.", Username = username, Role = role });
     }
 }
