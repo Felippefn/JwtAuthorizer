@@ -15,7 +15,7 @@ public class TokenService : ITokenService
         var claims = new[]
           {
             new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-            new Claim(ClaimTypes.Email, user.EmailAddress),
+            new Claim(ClaimTypes.Email, user.Email),
             new Claim(ClaimTypes.Role, user.Role.ToString())
         };
 
@@ -64,7 +64,7 @@ public class TokenService : ITokenService
         var user = new User
         {
             Id = Guid.Parse(jwt.Claims.First(c => c.Type == JwtRegisteredClaimNames.Sub).Value),
-            Username = jwt.Claims.First(c => c.Type == ClaimTypes.Name).Value,
+            Email = jwt.Claims.First(c => c.Type == ClaimTypes.Name).Value,
             Role = Enum.Parse<Permission>(jwt.Claims.First(c => c.Type == ClaimTypes.Role).Value)
         };
 

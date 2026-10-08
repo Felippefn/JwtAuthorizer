@@ -17,9 +17,7 @@ public class AuthController : ControllerBase
     [HttpPost("signup")]
     public async Task<IActionResult> Signup(SignupRequest request)
     {
-        if
-
-        var token = await _userService.SignupAsync(request.EmailAddress, request.Password);
+        var token = await _userService.SignupAsync(request.Email, request.Password);
         return Ok(new { Message = "User created successfully." });
     }
 

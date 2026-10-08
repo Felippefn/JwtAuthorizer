@@ -20,7 +20,7 @@
         var user = new User
         {
             Id = Guid.NewGuid(),
-            EmailAddress = email,
+            Email = email,
             PasswordHash = _passwordHasher.Hash(password),
             Role = role ?? Permission.User
         };

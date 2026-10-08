@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 public record SignupRequest(
-    [property: Required, EmailAddress] string EmailAddress,
+    [property: Required, EmailAddress] string Email,
     [property: Required] string FirstName,
     [property: Required] string LastName,
     [property: Phone] string PrimaryPhoneNumber,
