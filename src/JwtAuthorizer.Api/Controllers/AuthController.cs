@@ -15,16 +15,22 @@ public class AuthController : ControllerBase
 
 
     [HttpPost("signup")]
-    public async Task<IActionResult> Signup(SignupRequest request)
+    public async Task<IActionResult> Signup([FromBody] SignupRequest request)
     {
-        var token = await _userService.SignupAsync(request.Email, request.Password);
-        return Ok(new { Message = "User created successfully." });
+        var token = await _userService.SignupAsync(new SignupData(
+            Email: request.EmailAddress,
+            FirstName: request.FirstName,
+            LastName: request.LastName,
+            PrimaryPhoneNumber: request?.PrimaryPhoneNumber,
+            PasswordHash: request.Password
+        ));
+        return Created("User created successfully.", new { User = request.EmailAddress });
     }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
-        var token = await _userService.LoginAsync(request.Username, request.Password);
+        var token = await _userService.LoginAsync(request.EmailAddress, request.Password);
         if (token is null)
             return Unauthorized();
 
@@ -35,19 +41,19 @@ public class AuthController : ControllerBase
     [HttpGet("me")]
     public IActionResult Me()
     {
-        var username = User.FindFirst(ClaimTypes.Name)?.Value;
-        var role = User.FindFirst(ClaimTypes.Role)?.Value;
+        var email = User.FindFirst(ClaimTypes.Email)?.Value;
+        var role = User.FindFirst(ClaimTypes.Role.ToString())?.Value;
 
-        return Ok(new { Message = "User information retrieved successfully.", Username = username, Role = role });
+        return Ok(new { Message = "User information retrieved successfully.", Email = email, Role = role });
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "ADMIN")]
     [HttpGet("me2")]
     public IActionResult Me2()
     {
-        var username = User.FindFirst(ClaimTypes.Name)?.Value;
+        var email = User.FindFirst(ClaimTypes.Email)?.Value;
         var role = User.FindFirst(ClaimTypes.Role)?.Value;
 
-        return Ok(new { Message = "User information retrieved successfully.", Username = username, Role = role });
+        return Ok(new { Message = "User information retrieved successfully.", Email = email, Role = role });
     }
 }

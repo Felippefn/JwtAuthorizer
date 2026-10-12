@@ -21,13 +21,13 @@ public class UserRepository : IUserRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task UpdateUserAsync(User user)
+    public async Task UpdateAsync(User user)
     {
         _context.Users.Update(user);
         await _context.SaveChangesAsync();
     }
 
-    public async Task DeleteUserAsync(string id)
+    public async Task DeleteUser(string id)
     {
         var user = await _context.Users.FindAsync(id);
         if (user != null)

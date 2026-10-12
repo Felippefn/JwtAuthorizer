@@ -5,7 +5,7 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite("Data Source=jwtauthorizer.db"));
+builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -33,6 +33,7 @@ builder.Services.AddAuthentication(options => options.DefaultScheme = "Bearer")
 var app = builder.Build();
 
 
+app.UseHttpsRedirection();
 //app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
@@ -44,7 +45,5 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
-
-app.UseHttpsRedirection();
 
 app.Run();

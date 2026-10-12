@@ -2,6 +2,10 @@
 using System.ComponentModel.DataAnnotations;
 
 public record LoginRequest(
-    [property: Required, EmailAddress] string EmailAddress,
-    [property: Required] string Password
+    [param: Required]
+    [param: EmailAddress] 
+    string EmailAddress,
+    
+    [param: Required] 
+    string Password
 );

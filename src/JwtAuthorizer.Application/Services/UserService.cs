@@ -11,29 +11,35 @@
         _tokenService = tokenService;
     }
 
-    public async Task<string> SignupAsync(string username, string email, string password, Permission? role)
+    public async Task<string> SignupAsync(SignupData data)
     {
-        var existing = await _userRepository.GetByUserName(username);
+        var existing = await _userRepository.GetByEmail(data.Email);
         if (existing is not null)
             throw new InvalidOperationException("User already exists.");
 
         var user = new User
         {
             Id = Guid.NewGuid(),
-            Email = email,
-            PasswordHash = _passwordHasher.Hash(password),
-            Role = role ?? Permission.User
+            Email = data.Email,
+            FirstName = data.FirstName,
+            LastName = data.LastName,
+            PrimaryPhoneNumber = data?.PrimaryPhoneNumber,
+            PasswordHash = _passwordHasher.Hash(data.PasswordHash),
+            Role = Permission.USER
         };
 
         await _userRepository.AddAsync(user);
         return await _tokenService.GenerateTokenAsync(user);
     }
 
-    public async Task<string?> LoginAsync(string username, string password)
+    public async Task<string?> LoginAsync(string email, string password)
     {
-        var user = await _userRepository.GetByUserName(username);
+        var user = await _userRepository.GetByEmail(email);
         if (user is null || !_passwordHasher.Verify(password, user.PasswordHash))
             return null;
+
+        user.LastSignInAt = DateTimeHelper.HorarioBrasilia;
+        await _userRepository.UpdateAsync(user);
 
         return await _tokenService.GenerateTokenAsync(user);
     }

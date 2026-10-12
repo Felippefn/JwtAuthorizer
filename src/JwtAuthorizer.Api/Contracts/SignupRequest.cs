@@ -1,9 +1,20 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 public record SignupRequest(
-    [property: Required, EmailAddress] string Email,
-    [property: Required] string FirstName,
-    [property: Required] string LastName,
-    [property: Phone] string PrimaryPhoneNumber,
-    [property: Required, MinLength(6)] string Password
+    [param: Required]
+    [param: EmailAddress] 
+    string EmailAddress,
+
+    [param: Required]
+    string FirstName,
+
+    [param: Required]
+    string LastName,
+
+    [param: Phone]
+    string? PrimaryPhoneNumber,
+
+    [param: Required]
+    [param: StringLength(100, MinimumLength = 6)]
+    string Password
 );
