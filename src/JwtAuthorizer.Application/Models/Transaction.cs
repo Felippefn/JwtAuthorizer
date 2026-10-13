@@ -1,13 +1,13 @@
 ﻿
-public enum TransactionType { Credit, Debit }
+public enum TransactionType { CREDIT, DEBIT }
 public class Transaction : BaseEntity
 {
-    public string Title { get; private set; } = null!;
-    public TransactionType Type { get; private set; }
+    public string Title { get; set; } = null!;
+    public TransactionType Type { get; set; }
     public StatusTransaction Status { get; set; }
-    public decimal Amount { get; private set; }
+    public decimal Amount { get; set; }
     public Guid? InvoiceId { get; set; }
     public string? ErrorMessage { get; set; }
-    public Guid WalletId { get; private set; }
+    public Guid WalletId { get; set; }
 }
 
